@@ -1,0 +1,45 @@
+--zadanie1
+select distinct Production.Product.Name, Production.ProductSubcategory.Name, Production.ProductCategory.Name
+from Production.Product join  Production.ProductSubcategory on Production.Product.ProductSubcategoryID = Production.ProductSubcategory.ProductSubcategoryID
+join Production.ProductCategory on Production.ProductCategory.ProductCategoryID = Production.ProductSubcategory.ProductCategoryID;
+
+--zadanie2
+select distinct prs.FirstName, prs.Lastname
+from Person.Person as prs join HumanResources.Employee on prs.BusinessEntityID = HumanResources.Employee.BusinessEntityID
+where HumanResources.Employee.BirthDate = (select MAX(HumanResources.Employee.BirthDate) from HumanResources.Employee);
+
+--zadanie3
+select worker.BusinessEntityID, res.Rate
+from HumanResources.Employee as worker join HumanResources.EmployeePayHistory as res on worker.BusinessEntityID = res.BusinessEntityID;
+
+--zadanie4
+
+select a.Name
+from HumanResources.Department as a join HumanResources.EmployeeDepartmentHistory as b on a.DepartmentID = b.DepartmentID
+join HumanResources.Employee as c on b.BusinessEntityID = c.BusinessEntityID
+where a.Name like '_r%'
+group by a.Name
+having COUNT(b.BusinessEntityID) > 50;
+
+--zadanie5
+
+select prs.FirstName, prs.LastName, pay.Rate
+from Person.Person as prs join HumanResources.EmployeePayHistory as pay on prs.BusinessEntityID = pay.BusinessEntityID
+where pay.Rate > 25;
+
+--zadanie6
+select d.Name,COUNT(*)
+from HumanResources.Department d join HumanResources.EmployeeDepartmentHistory edh
+     on d.DepartmentID=edh.DepartmentID
+group by d.Name
+having COUNT(*) = (select min(c) from (select COUNT(*) c
+                   from HumanResources.EmployeeDepartmentHistory
+                   group by DepartmentID) tab)
+                   
+--zadanie7
+select distinct b.Name, a.Name, a.ListPrice
+from Production.Product as a join Production.ProductSubcategory as b on a.ProductSubcategoryID = b.ProductSubcategoryID
+where a.ListPrice =
+	(select MAX(c.ListPrice) from Production.Product as c
+	join Production.ProductSubcategory as d on c.ProductSubcategoryID = d.ProductSubcategoryID
+	where b.ProductSubcategoryID = d.ProductSubcategoryID);
