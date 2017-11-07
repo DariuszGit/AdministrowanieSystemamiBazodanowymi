@@ -1,0 +1,42 @@
+--cwiczenia 5
+--zadanie1
+create table osoby(id int primary key, imie varchar(40), nazwisko varchar(60));
+
+--zadanie2
+insert into osoby values(1, 'Jan', 'Nowak')
+insert into osoby values(2, 'Ewa', 'Lis')
+
+--zadanie2a
+BACKUP DATABASE Demo TO DISK = 'C:\data\DemoFull.bak'
+
+--zadanie2b
+insert into osoby values(3, 'Tomasz', 'Uliczny')
+
+BACKUP DATABASE Demo TO DISK = 'C:\data\DemoDiff.bak'
+WITH DIFFERENTIAL,
+FORMAT,
+MEDIANAME = 'demoDBDiff'
+
+--zadanie2c
+insert into osoby values(4, 'Mariusz', 'Nowak')
+
+BACKUP LOG Demo TO DISK = 'C:\data\DemoLog.trn'
+WITH MEDIANAME ='demoDBLog'
+
+--zadanie2f
+BACKUP LOG Demo TO DISK = 'C:\data\DemoLog.trn'
+WITH MEDIANAME ='demoDBLog', continue_after_error
+
+--zadanie2g
+RESTORE DATABASE Demo FROM DISK = 'C:\data\DemoFull.bak'
+WITH NORECOVERY
+
+RESTORE DATABASE Demo FROM DISK = 'C:\data\DemoDiff.bak'
+WITH NORECOVERY
+
+RESTORE LOG Demo FROM DISK = 'C:\data\DemoLog.trn'
+WITH RECOVERY
+
+--zadanie2h
+
+restore database demo with recovery
